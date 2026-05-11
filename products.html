@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ product.model_name }}{% endblock %}
+{% block content %}
+<div style="display: flex; gap: 30px;">
+    <div style="flex: 1;">
+        <h1>{{ product.model_name }}</h1>
+        <p><strong>Категория:</strong> {{ product.category }}</p>
+        <p><strong>Описание:</strong> {{ product.description }}</p>
+        <p><strong>Цвет:</strong> {{ product.color }}</p>
+        <p><strong>Размеры:</strong> {{ product.sizes }}</p>
+        <p class="price" style="font-size: 28px;">{{ product.price }} ₽</p>
+        <p class="stock">В наличии: {{ product.in_stock }} шт.</p>
+
+        <div style="margin: 20px 0;">
+            <label>Количество: </label>
+            <input type="number" id="qty" value="1" min="1" max="{{ product.in_stock }}" style="width: 60px; padding: 5px;">
+            <button onclick="addToCart()" class="btn btn-blue" style="margin-left: 10px;">Добавить в корзину</button>
+        </div>
+        <a href="/catalog" class="btn">Вернуться в каталог</a>
+    </div>
+</div>
+
+<script>
+function addToCart() {
+    const qty = document.getElementById('qty').value;
+    fetch('/add_to_cart', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            model_id: {{ product.model_id }},
+            name: "{{ product.model_name }}",
+            price: {{ product.price }},
+            quantity: parseInt(qty)
+        })
+    }).then(r => r.json()).then(data => {
+        if(data.status === 'ok') {
+            alert('Товар добавлен в корзину!');
+            window.location.href = '/cart';
+        }
+    });
+}
+</script>
+{% endblock %}

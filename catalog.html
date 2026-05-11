@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Каталог товаров{% endblock %}
+{% block content %}
+<h1>Каталог товаров</h1>
+<div style="margin-top: 20px;">
+    {% if products %}
+        {% for p in products %}
+        <div class="card">
+            <h3>{{ p.model_name }}</h3>
+            <p>{{ p.category }}</p>
+            <p>Цвет: {{ p.color }} | Размеры: {{ p.sizes }}</p>
+            <p>{{ p.description }}</p>
+            <p class="price">{{ p.price }} ₽</p>
+            <p class="stock">В наличии: {{ p.in_stock }} шт.</p>
+            <a href="/product/{{ p.model_id }}" class="btn">Подробнее</a>
+            <button onclick="addToCart({{ p.model_id }}, '{{ p.model_name }}', {{ p.price }})" class="btn btn-blue">В корзину</button>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>В каталоге пока нет товаров</p>
+    {% endif %}
+</div>
+
+<script>
+function addToCart(id, name, price) {
+    fetch('/add_to_cart', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({model_id: id, name: name, price: price, quantity: 1})
+    }).then(r => r.json()).then(data => {
+        if(data.status === 'ok') alert('Товар добавлен в корзину!');
+    });
+}
+</script>
+{% endblock %}

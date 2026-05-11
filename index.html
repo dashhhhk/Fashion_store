@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Магазин Одежды - Главная{% endblock %}
+{% block content %}
+<h1>Добро пожаловать в Магазин Одежды</h1>
+<p style="margin: 20px 0; color: #666;">Откройте для себя нашу новую коллекцию</p>
+
+<h2>Популярные товары</h2>
+<div style="margin-top: 20px;">
+    {% if products %}
+        {% for p in products %}
+        <div class="card">
+            <h3>{{ p.model_name }}</h3>
+            <p>{{ p.category }}</p>
+            <p>Цвет: {{ p.color }} | Размеры: {{ p.sizes }}</p>
+            <p class="price">{{ p.price }} ₽</p>
+            <p class="stock">В наличии: {{ p.in_stock }} шт.</p>
+            <a href="/product/{{ p.model_id }}" class="btn">Подробнее</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Товары временно отсутствуют</p>
+    {% endif %}
+</div>
+{% endblock %}

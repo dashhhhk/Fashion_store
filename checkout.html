@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Оформление заказа{% endblock %}
+{% block content %}
+<h1>Оформление заказа</h1>
+
+<div style="display: flex; gap: 30px;">
+    <div style="flex: 1;">
+        <h2>Ваш заказ</h2>
+        <table>
+            <tr><th>Товар</th><th>Кол-во</th><th>Цена</th></tr>
+            {% for id, item in cart.items() %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price * item.quantity }} ₽</td>
+            </tr>
+            {% endfor %}
+            <tr style="font-weight: bold;"><td colspan="2">Итого:</td><td>{{ total }} ₽</td></tr>
+        </table>
+    </div>
+
+    <div style="flex: 1;">
+        <h2>Данные для доставки</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>ФИО:</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Телефон:</label>
+                <input type="text" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email">
+            </div>
+            <div class="form-group">
+                <label>Адрес доставки:</label>
+                <textarea name="address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Способ доставки:</label>
+                <select name="delivery">
+                    <option value="Courier">Курьер</option>
+                    <option value="Mail">Почта</option>
+                    <option value="Pickup">Самовывоз</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Оформить заказ</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Мои заказы{% endblock %}
+{% block content %}
+<h1>Мои заказы</h1>
+<p>Введите номер телефона для просмотра заказов:</p>
+<form method="GET" style="max-width: 400px;">
+    <div class="form-group">
+        <input type="text" name="phone" placeholder="+79001234567" required>
+    </div>
+    <button type="submit" class="btn">Найти</button>
+</form>
+{% endblock %}

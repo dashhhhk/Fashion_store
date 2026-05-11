@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Управление заказами{% endblock %}
+{% block content %}
+<h1>Управление заказами</h1>
+
+{% if orders %}
+    <table>
+        <tr>
+            <th>№ Заказа</th>
+            <th>Клиент</th>
+            <th>Телефон</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Сумма</th>
+            <th>Доставка</th>
+            <th>Позиций</th>
+            <th>Действие</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.client_order_id }}</td>
+            <td>{{ order.client_name }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.order_date }}</td>
+            <td><strong>{{ order.status }}</strong></td>
+            <td>{{ order.total_amount }} ₽</td>
+            <td>{{ order.delivery_method }}</td>
+            <td>{{ order.items_count }}</td>
+            <td><a href="/admin/order/{{ order.client_order_id }}" class="btn">Управлять</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Заказов пока нет</p>
+{% endif %}
+{% endblock %}

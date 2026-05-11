@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Заказ №{{ order.client_order_id }}{% endblock %}
+{% block content %}
+<h1>Заказ №{{ order.client_order_id }}</h1>
+
+<div style="display: flex; gap: 30px;">
+    <div style="flex: 1;">
+        <h2>Информация о заказе</h2>
+        <p><strong>Клиент:</strong> {{ order.client_name }}</p>
+        <p><strong>Телефон:</strong> {{ order.phone }}</p>
+        <p><strong>Адрес:</strong> {{ order.delivery_address }}</p>
+        <p><strong>Дата:</strong> {{ order.order_date }}</p>
+        <p><strong>Доставка:</strong> {{ order.delivery_method }}</p>
+        <p><strong>Сумма:</strong> {{ order.total_amount }} ₽</p>
+
+        <h3>Состав заказа:</h3>
+        <table>
+            <tr><th>Модель</th><th>Цвет</th><th>Размер</th><th>Кол-во</th><th>Цена</th></tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.model_name }}</td>
+                <td>{{ item.color }}</td>
+                <td>{{ item.sizes }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price_at_order }} ₽</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div style="flex: 1;">
+        <h2>Назначить сотрудников</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Статус заказа:</label>
+                <select name="status">
+                    <option value="New" {% if order.status == 'New' %}selected{% endif %}>Новый</option>
+                    <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>В обработке</option>
+                    <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Выполнен</option>
+                    <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Отменён</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Упаковщик:</label>
+                <select name="packer_id">
+                    <option value="">Не назначен</option>
+                    {% for emp in employees %}
+                    <option value="{{ emp.employee_id }}" {% if order.packer_id == emp.employee_id %}selected{% endif %}>
+                        {{ emp.full_name }} ({{ emp.position }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Курьер:</label>
+                <select name="courier_id">
+                    <option value="">Не назначен</option>
+                    {% for emp in employees %}
+                    <option value="{{ emp.employee_id }}" {% if order.courier_id == emp.employee_id %}selected{% endif %}>
+                        {{ emp.full_name }} ({{ emp.position }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+
+<a href="/admin/orders" class="btn" style="margin-top: 20px;">Вернуться к заказам</a>
+{% endblock %}
